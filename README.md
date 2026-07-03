@@ -1,4 +1,4 @@
-# Pok-Vault
+# Poke-Vault
 An Android application designed to help Pokémon card collectors organize and manage their collections.
 
 
