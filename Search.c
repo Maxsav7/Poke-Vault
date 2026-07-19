@@ -64,7 +64,6 @@ bool filterOwnedCard(const OwnedCard* card, FilterBounds bounds){
 }
 //returns a filtered int array for the indexes of matches
 int* changeFilter(const CardArrayList* library, int* searchResults, FilterBounds bounds, int matchCount, int* filteredCount){
-    Card* cards = library->cards;
     Card currentCard;
     int* filterResults = malloc(sizeof(int) * matchCount);
     *filteredCount = 0;
@@ -80,7 +79,6 @@ int* changeFilter(const CardArrayList* library, int* searchResults, FilterBounds
     return filterResults;
 }
 int* changeOwnedCardFilter(const OwnedCardArrayList* library, int* searchResults, FilterBounds bounds, int matchCount, int* filteredCount){
-    OwnedCard* cards = library->cards;
     OwnedCard currentCard;
     int* filterResults = malloc(sizeof(int) * matchCount);
     *filteredCount = 0;

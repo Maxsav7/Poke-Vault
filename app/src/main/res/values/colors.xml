@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Shared colors used by the Android screen layouts and theme. -->
+<resources>
+    <color name="vault_red">#D83A3A</color>
+    <color name="vault_dark">#20242C</color>
+    <color name="vault_gold">#F2C94C</color>
+    <color name="vault_background">#F5F5F5</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#111111</color>
+</resources>

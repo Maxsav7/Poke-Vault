@@ -17,7 +17,7 @@
 Card card_init(const char* name, const char* set, double value, int8_t rarity, int8_t stage, int8_t type){
     Card card;
     copyString(card.name, name, 50);//defined in Misc.c
-    copyString(card.name, name, 100);//defined in Misc.c
+    copyString(card.set, set, 100);//defined in Misc.c
     card.value = value;
     card.rarity = rarity;
     card.stage = stage;
@@ -49,7 +49,7 @@ OwnedCard OwnedCard_init(Card* card, const char* set, double purchasePrice, int8
     card->owned = true;
 
     return newCard;
-};
+}
 
 /*
 String name 

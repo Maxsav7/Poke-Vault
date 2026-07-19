@@ -34,6 +34,8 @@ typedef struct {
 
 bool filterCard(const Card* card, FilterBounds bounds); //returns a filtered int array of the matches
 bool filterOwnedCard(const OwnedCard* card, FilterBounds bounds); //returns a filtered int array of the matches
+int* changeFilter(const CardArrayList* library, int* searchResults, FilterBounds bounds, int matchCount, int* filteredCount);
+int* changeOwnedCardFilter(const OwnedCardArrayList* library, int* searchResults, FilterBounds bounds, int matchCount, int* filteredCount);
 int* searchCards(const CardArrayList* library, const char* name, int* matchCount);//returns an int array for the indexes of matches
 int* searchOwnedCards(const OwnedCardArrayList* library, const char* name, int* matchCount);//returns an int array for the indexes of matches
 int* sortAllCards(int* searchResults, int* matchCount, SortValue sort, bool descending);//sorts and returns a global int array
