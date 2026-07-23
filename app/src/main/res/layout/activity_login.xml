@@ -1,70 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- LOGIN SCREEN: Edit this file to change how the login page looks. -->
+<!-- LOGIN SCREEN: Existing IDs preserved for Java compatibility. -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/vault_background">
+    android:background="@drawable/background_premium"
+    android:fillViewport="true"
+    android:overScrollMode="never">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:padding="32dp">
+        android:paddingStart="24dp"
+        android:paddingTop="88dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="40dp">
+
+        <!-- Replace this space with your finished logo later. -->
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="20dp" />
+
+        <!-- PokéVault wordmark -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semibold"
+                android:includeFontPadding="false"
+                android:text="Poke"
+                android:textColor="@color/vault_dark"
+                android:textSize="38sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semibold"
+                android:includeFontPadding="false"
+                android:text="Vault"
+                android:textColor="@color/vault_red"
+                android:textSize="38sp" />
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/nunito_sans_regular"
             android:gravity="center"
-            android:text="POKÉVAULT"
-            android:textColor="@color/vault_red"
-            android:textSize="34sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="28dp"
-            android:gravity="center"
-            android:text="Your card collection, in your pocket"
-            android:textColor="@color/vault_dark"
+            android:text="Collect. Organize. Discover."
+            android:textColor="@color/text_secondary"
             android:textSize="16sp" />
 
+        <!-- Metallic accent -->
+        <View
+            android:layout_width="64dp"
+            android:layout_height="4dp"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/gold_accent" />
+
+        <!-- Login card -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="34dp"
             android:background="@drawable/panel"
+            android:elevation="5dp"
             android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semibold"
+                android:includeFontPadding="false"
+                android:text="Welcome back"
+                android:textColor="@color/vault_dark"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/nunito_sans_regular"
+                android:lineSpacingExtra="2dp"
+                android:text="Log in to continue managing your collection."
+                android:textColor="@color/text_secondary"
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/usernameInput"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="58dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/input_field"
+                android:fontFamily="@font/nunito_sans_regular"
                 android:hint="Username"
-                android:inputType="text" />
+                android:inputType="text"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:singleLine="true"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_muted"
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/passwordInput"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="58dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/input_field"
+                android:fontFamily="@font/nunito_sans_regular"
                 android:hint="Password"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:singleLine="true"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_muted"
+                android:textSize="16sp" />
 
             <Button
                 android:id="@+id/loginButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_width="220dp"
+                android:layout_height="58dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="24dp"
                 android:background="@drawable/button_red"
+                android:backgroundTint="@null"
+                android:elevation="3dp"
+                android:fontFamily="@font/poppins_semibold"
                 android:text="Log In"
-                android:textColor="@color/white" />
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
 
             <Button
                 android:id="@+id/createButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Create Profile" />
+                android:layout_width="220dp"
+                android:layout_height="56dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/button_outline_navy"
+                android:backgroundTint="@null"
+                android:elevation="1dp"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="Create Trainer Profile"
+                android:textAllCaps="false"
+                android:textColor="@color/vault_dark"
+                android:textSize="15sp" />
+
         </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/nunito_sans_regular"
+            android:gravity="center"
+            android:text="Your collection, safely organized."
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp" />
+
     </LinearLayout>
+
 </ScrollView>

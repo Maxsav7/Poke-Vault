@@ -1,37 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- VAULT SCREEN: Shows the current user's saved cards and total value. -->
+<!-- VAULT SCREEN: Existing IDs preserved for Java compatibility. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/vault_background"
+    android:background="@drawable/background_premium"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:paddingStart="22dp"
+    android:paddingTop="46dp"
+    android:paddingEnd="22dp"
+    android:paddingBottom="22dp">
 
+    <!-- Page header -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_semibold"
+        android:includeFontPadding="false"
         android:text="My Vault"
         android:textColor="@color/vault_dark"
-        android:textSize="28sp"
-        android:textStyle="bold" />
+        android:textSize="30sp" />
 
     <TextView
-        android:id="@+id/vaultTotalText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:textSize="18sp" />
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/nunito_sans_regular"
+        android:text="Your saved collection, all in one place"
+        android:textColor="@color/text_secondary"
+        android:textSize="15sp" />
 
+    <View
+        android:layout_width="367dp"
+        android:layout_height="4dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/gold_accent" />
+
+    <!-- Vault summary hero -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
+        android:background="@drawable/panel"
+        android:elevation="5dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/stat_tile"
+                android:fontFamily="@font/poppins_semibold"
+                android:gravity="center"
+                android:text="V"
+                android:textColor="@color/vault_red"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:includeFontPadding="false"
+                    android:text="Vault Summary"
+                    android:textColor="@color/vault_dark"
+                    android:textSize="19sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:fontFamily="@font/nunito_sans_regular"
+                    android:text="Track your cards and total value"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="18dp"
+            android:background="@color/divider" />
+
+        <TextView
+            android:id="@+id/vaultTotalText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/nunito_sans_regular"
+            android:lineSpacingExtra="6dp"
+            android:text="Cards Saved: 0&#10;Total Vault Value: $0.00"
+            android:textColor="@color/text_primary"
+            android:textSize="17sp" />
+
+    </LinearLayout>
+
+    <!-- Collection section heading -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/poppins_semibold"
+            android:includeFontPadding="false"
+            android:text="Saved Cards"
+            android:textColor="@color/vault_dark"
+            android:textSize="19sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_sans_regular"
+            android:text="COLLECTION"
+            android:textColor="@color/vault_gold_dark"
+            android:textSize="11sp" />
+
+    </LinearLayout>
+
+    <!-- Saved card list -->
     <ListView
         android:id="@+id/vaultList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="12dp"
         android:layout_weight="1"
-        android:dividerHeight="8dp" />
+        android:clipToPadding="false"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="12dp"
+        android:listSelector="@android:color/transparent"
+        android:overScrollMode="never"
+        android:paddingTop="2dp"
+        android:paddingBottom="8dp"
+        android:scrollbars="none" />
 
+    <!-- Back action -->
     <Button
         android:id="@+id/vaultBackButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Back" />
+        android:layout_height="40dp"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/button_outline_navy"
+        android:backgroundTint="@null"
+        android:elevation="1dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Back to Dashboard"
+        android:textAllCaps="false"
+        android:textColor="@color/vault_dark"
+        android:textSize="15sp" />
+
 </LinearLayout>

@@ -1,11 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Controls the app-wide Android theme, fonts, and system bar colors. -->
+<!-- Controls the app-wide Android theme and system bar colors. -->
 <resources>
-    <style name="Theme.PokeVault" parent="android:style/Theme.Material.Light.NoActionBar">
-        <item name="android:fontFamily">sans</item>
+
+    <style
+        name="Theme.PokeVault"
+        parent="android:style/Theme.Material.Light.NoActionBar">
+
+        <item name="android:fontFamily">@font/nunito_sans_regular</item>
+
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowNoTitle">true</item>
+
         <item name="android:colorAccent">@color/vault_red</item>
-        <item name="android:navigationBarColor">@color/vault_dark</item>
+
+        <item name="android:windowBackground">@drawable/background_premium</item>
+
         <item name="android:statusBarColor">@color/vault_dark</item>
+        <item name="android:navigationBarColor">@color/vault_dark</item>
+
         <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+
+        <item name="android:buttonStyle">@style/PokeVaultButtonBase</item>
+
     </style>
+
+    <style
+        name="PokeVaultButtonBase"
+        parent="@android:style/Widget.Material.Button">
+
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:stateListAnimator">@null</item>
+
+    </style>
+
 </resources>

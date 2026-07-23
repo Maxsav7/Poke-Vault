@@ -1,29 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- CARD ROW: Reused for each card shown in the catalog and vault lists. -->
+<!--
+    CARD ROW:
+    Reused for each card displayed in the Catalog and Vault.
+    Existing IDs are preserved for Java compatibility.
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:minHeight="154dp"
     android:background="@drawable/panel"
-    android:orientation="vertical">
+    android:elevation="3dp"
+    android:orientation="vertical"
+    android:paddingStart="22dp"
+    android:paddingTop="18dp"
+    android:paddingEnd="18dp"
+    android:paddingBottom="16dp">
 
-    <TextView
-        android:id="@+id/cardNameText"
+    <!-- Card information -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/vault_dark"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/cardInfoText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="14sp" />
+        <!-- Decorative collectible thumbnail placeholder -->
+        <LinearLayout
+            android:layout_width="58dp"
+            android:layout_height="76dp"
+            android:background="@drawable/stat_tile"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="6dp">
 
+            <TextView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/button_secondary"
+                android:fontFamily="@font/poppins_semibold"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="PV"
+                android:textColor="@color/vault_red"
+                android:textSize="11sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:fontFamily="@font/nunito_sans_regular"
+                android:includeFontPadding="false"
+                android:text="CARD"
+                android:textColor="@color/vault_gold_dark"
+                android:textSize="9sp" />
+
+        </LinearLayout>
+
+        <!-- Name and card metadata -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/cardNameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/poppins_semibold"
+                android:includeFontPadding="false"
+                android:maxLines="2"
+                android:text="Card Name"
+                android:textColor="@color/vault_dark"
+                android:textSize="18sp" />
+
+            <View
+                android:layout_width="36dp"
+                android:layout_height="3dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/gold_accent" />
+
+            <TextView
+                android:id="@+id/cardInfoText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:fontFamily="@font/nunito_sans_regular"
+                android:lineSpacingExtra="2dp"
+                android:text="Set information"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Row action -->
     <Button
         android:id="@+id/cardActionButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:text="Add to Vault" />
+        android:layout_height="33dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_secondary"
+        android:backgroundTint="@null"
+        android:elevation="0dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:text="Add to Vault"
+        android:textAllCaps="false"
+        android:textColor="@color/vault_dark"
+        android:textSize="14sp" />
+
 </LinearLayout>
