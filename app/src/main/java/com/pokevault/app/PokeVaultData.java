@@ -70,13 +70,15 @@ public class PokeVaultData {
                 if (line.trim().isEmpty() || line.startsWith("#")) {
                     continue;
                 }
-                String[] values = line.split(",");
-                if (values.length >= 4) {
+                String[] values = line.split(",", -1);
+                if (values.length >= 6) {
                     cards.add(new Card(
                         values[0].trim(),
                         values[1].trim(),
-                        Double.parseDouble(values[2].trim()),
-                        Integer.parseInt(values[3].trim())
+                        values[2].trim(),
+                        Double.parseDouble(values[3].trim()),
+                        values[4].trim(),
+                        values[5].trim()
                     ));
                 }
             }
@@ -114,6 +116,12 @@ public class PokeVaultData {
         }
     }
 
+    public void removeAll(Card card) {
+        preferences.edit().remove(
+            quantityKey(getCurrentUser().getUsername(), card.getName())
+        ).apply();
+    }
+
     public int getQuantity(Card card) {
         return preferences.getInt(
             quantityKey(getCurrentUser().getUsername(), card.getName()), 0
@@ -130,6 +138,25 @@ public class PokeVaultData {
         return ownedCards;
     }
 
+    public CardCondition getCondition(Card card) {
+        String stored = preferences.getString(
+            conditionKey(getCurrentUser().getUsername(), card.getName()),
+            CardCondition.NEAR_MINT.name()
+        );
+        return CardCondition.fromStoredValue(stored);
+    }
+
+    public void setCondition(Card card, CardCondition condition) {
+        preferences.edit().putString(
+            conditionKey(getCurrentUser().getUsername(), card.getName()),
+            condition.name()
+        ).apply();
+    }
+
+    public double getAdjustedValue(Card card) {
+        return card.getMarketValue() * getCondition(card).getPriceMultiplier();
+    }
+
     public int getTotalCardCount() {
         int total = 0;
         for (Card card : getVaultCards()) {
@@ -141,7 +168,7 @@ public class PokeVaultData {
     public double getVaultValue() {
         double total = 0;
         for (Card card : getVaultCards()) {
-            total += card.getMarketValue() * getQuantity(card);
+            total += getAdjustedValue(card) * getQuantity(card);
         }
         return total;
     }
@@ -152,5 +179,9 @@ public class PokeVaultData {
 
     private String quantityKey(String username, String cardName) {
         return "quantity_" + username + "_" + cardName;
+    }
+
+    private String conditionKey(String username, String cardName) {
+        return "condition_" + username + "_" + cardName;
     }
 }

@@ -5,16 +5,25 @@
 package com.pokevault.app;
 
 public class Card {
+    private final String number;
     private final String name;
     private final String setName;
     private final double marketValue;
-    private final int rarity;
+    private final String rarityName;
+    private final String imageUrl;
 
-    public Card(String name, String setName, double marketValue, int rarity) {
+    public Card(String number, String name, String setName, double marketValue,
+                String rarityName, String imageUrl) {
+        this.number = number;
         this.name = name;
         this.setName = setName;
         this.marketValue = marketValue;
-        this.rarity = rarity;
+        this.rarityName = rarityName;
+        this.imageUrl = imageUrl;
+    }
+
+    public String getNumber() {
+        return number;
     }
 
     public String getName() {
@@ -30,13 +39,10 @@ public class Card {
     }
 
     public String getRarityName() {
-        String[] names = {
-            "Common", "Uncommon", "Rare", "Holofoil Rare",
-            "Double Rare", "Ultra Rare", "Secret Rare"
-        };
-        if (rarity < 0 || rarity >= names.length) {
-            return "Unknown";
-        }
-        return names[rarity];
+        return rarityName.isEmpty() ? "Energy" : rarityName;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 }

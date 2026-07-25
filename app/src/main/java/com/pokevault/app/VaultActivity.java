@@ -8,7 +8,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 import java.util.Locale;
@@ -32,15 +31,6 @@ public class VaultActivity extends Activity {
             + "   Value: " + String.format(Locale.US, "$%.2f", data.getVaultValue()));
 
         ListView list = findViewById(R.id.vaultList);
-        list.setAdapter(new CardAdapter(this, cards, data, "Remove One",
-            new CardAdapter.CardAction() {
-                @Override
-                public void run(Card card) {
-                    data.removeCard(card);
-                    Toast.makeText(VaultActivity.this,
-                        "Removed one " + card.getName() + ".", Toast.LENGTH_SHORT).show();
-                    showVault();
-                }
-            }));
+        list.setAdapter(new CardAdapter(this, cards, data, true, this::showVault));
     }
 }

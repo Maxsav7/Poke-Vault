@@ -1,6 +1,5 @@
 /*
- * UI HELPER: Converts Card objects into the rows displayed by a ListView.
- * Both the catalog and vault reuse this class.
+ * UI HELPER: Converts Card objects into catalog and vault rows.
  */
 package com.pokevault.app;
 
@@ -8,31 +7,35 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
 public class CardAdapter extends BaseAdapter {
-    public interface CardAction {
-        void run(Card card);
-    }
-
+    private final Context context;
     private final LayoutInflater inflater;
     private final List<Card> cards;
     private final PokeVaultData data;
-    private final String actionLabel;
-    private final CardAction action;
+    private final boolean vaultMode;
+    private final Runnable onVaultChanged;
+    private final List<CardCondition> conditions = Arrays.asList(CardCondition.values());
 
     public CardAdapter(Context context, List<Card> cards, PokeVaultData data,
-                       String actionLabel, CardAction action) {
+                       boolean vaultMode, Runnable onVaultChanged) {
+        this.context = context;
         inflater = LayoutInflater.from(context);
         this.cards = cards;
         this.data = data;
-        this.actionLabel = actionLabel;
-        this.action = action;
+        this.vaultMode = vaultMode;
+        this.onVaultChanged = onVaultChanged;
     }
 
     @Override
@@ -57,25 +60,73 @@ public class CardAdapter extends BaseAdapter {
             row = inflater.inflate(R.layout.row_card, parent, false);
         }
 
-        final Card card = getItem(position);
+        Card card = getItem(position);
+        ImageView image = row.findViewById(R.id.cardImage);
         TextView name = row.findViewById(R.id.cardNameText);
         TextView information = row.findViewById(R.id.cardInfoText);
-        Button button = row.findViewById(R.id.cardActionButton);
+        TextView quantity = row.findViewById(R.id.cardQuantityText);
+        Spinner condition = row.findViewById(R.id.cardConditionSpinner);
+        Button minus = row.findViewById(R.id.cardMinusButton);
+        Button plus = row.findViewById(R.id.cardPlusButton);
+        Button remove = row.findViewById(R.id.cardActionButton);
 
+        CardImageLoader.load(card.getImageUrl(), image);
         name.setText(card.getName());
-        String details = card.getSetName() + " • " + card.getRarityName()
-            + " • " + String.format(Locale.US, "$%.2f", card.getMarketValue());
-        if (data.getQuantity(card) > 0) {
-            details += " • Owned: " + data.getQuantity(card);
-        }
-        information.setText(details);
-        button.setText(actionLabel);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                action.run(card);
+        bindDetails(card, information, quantity);
+
+        ArrayAdapter<CardCondition> conditionAdapter = new ArrayAdapter<>(
+            context, android.R.layout.simple_spinner_item, conditions
+        );
+        conditionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        condition.setOnItemSelectedListener(null);
+        condition.setAdapter(conditionAdapter);
+        condition.setSelection(conditions.indexOf(data.getCondition(card)), false);
+        condition.setOnItemSelectedListener(new SimpleItemSelectedListener(selectedPosition -> {
+            CardCondition selected = conditions.get(selectedPosition);
+            if (selected != data.getCondition(card)) {
+                data.setCondition(card, selected);
+                changed();
             }
+        }));
+
+        minus.setEnabled(data.getQuantity(card) > 0);
+        minus.setOnClickListener(view -> {
+            data.removeCard(card);
+            Toast.makeText(context, "Removed one " + card.getName() + ".",
+                Toast.LENGTH_SHORT).show();
+            changed();
+        });
+        plus.setOnClickListener(view -> {
+            data.addCard(card);
+            Toast.makeText(context, "Added one " + card.getName() + ".",
+                Toast.LENGTH_SHORT).show();
+            changed();
+        });
+
+        remove.setVisibility(vaultMode ? View.VISIBLE : View.GONE);
+        remove.setText("Remove Card");
+        remove.setOnClickListener(view -> {
+            data.removeAll(card);
+            Toast.makeText(context, card.getName() + " removed from your vault.",
+                Toast.LENGTH_SHORT).show();
+            changed();
         });
         return row;
+    }
+
+    private void bindDetails(Card card, TextView information, TextView quantity) {
+        String details = "Base Set • " + card.getNumber() + "/102 • " + card.getRarityName()
+            + "\n" + data.getCondition(card).getDisplayName() + " value: "
+            + String.format(Locale.US, "$%.2f", data.getAdjustedValue(card));
+        information.setText(details);
+        quantity.setText(String.valueOf(data.getQuantity(card)));
+    }
+
+    private void changed() {
+        if (vaultMode && onVaultChanged != null) {
+            onVaultChanged.run();
+        } else {
+            notifyDataSetChanged();
+        }
     }
 }

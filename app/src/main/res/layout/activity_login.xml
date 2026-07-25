@@ -94,6 +94,19 @@
                 android:textColor="@color/text_secondary"
                 android:textSize="15sp" />
 
+            <TextView
+                android:id="@+id/loginMessageText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/input_field"
+                android:fontFamily="@font/poppins_semibold"
+                android:padding="14dp"
+                android:text="Profile created successfully. Please log in."
+                android:textColor="@color/vault_dark"
+                android:textSize="14sp"
+                android:visibility="gone" />
+
             <EditText
                 android:id="@+id/usernameInput"
                 android:layout_width="match_parent"

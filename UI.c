@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <termios.h>
+#include <unistd.h>
 #include "Card.h"
 #include "Data.h"
 #include "Misc.h"
@@ -37,17 +39,95 @@ static void printHeader(const char* title){
     printLine();
 }
 
-static void readText(const char* prompt, char* output, size_t size){
+static int readLine(char* output, size_t size){
+    int character;
     size_t length;
-    printf("%s", prompt);
+
     if(fgets(output, (int)size, stdin) == NULL){
-        printf("\n\nInput ended. Closing PokeVault.\n");
-        exit(0);
+        return -1;
     }
+
     length = strlen(output);
     if(length > 0 && output[length - 1] == '\n'){
         output[length - 1] = '\0';
+        return 1;
     }
+
+    character = getchar();
+    if(character == '\n' || character == EOF){
+        return 1;
+    }
+    while((character = getchar()) != '\n' && character != EOF){
+        /* Discard characters that did not fit in the input buffer. */
+    }
+    return 0;
+}
+
+static void closeOnInputEnd(void){
+    printf("\n\nInput ended. Closing PokeVault.\n");
+    exit(0);
+}
+
+static void readText(const char* prompt, char* output, size_t size){
+    int result;
+
+    while(true){
+        printf("%s", prompt);
+        result = readLine(output, size);
+        if(result == 1){
+            return;
+        }
+        if(result == -1){
+            closeOnInputEnd();
+        }
+        printf("That entry is too long. Please use at most %zu characters.\n",
+               size - 1);
+    }
+}
+
+static void readPassword(const char* prompt, char* output, size_t size){
+    struct termios originalSettings;
+    struct termios hiddenSettings;
+    bool hideInput = isatty(STDIN_FILENO) &&
+                     tcgetattr(STDIN_FILENO, &originalSettings) == 0;
+    int result;
+
+    while(true){
+        printf("%s", prompt);
+        fflush(stdout);
+
+        if(hideInput){
+            hiddenSettings = originalSettings;
+            hiddenSettings.c_lflag &= (tcflag_t)~ECHO;
+            tcsetattr(STDIN_FILENO, TCSAFLUSH, &hiddenSettings);
+        }
+
+        result = readLine(output, size);
+
+        if(hideInput){
+            tcsetattr(STDIN_FILENO, TCSAFLUSH, &originalSettings);
+            printf("\n");
+        }
+
+        if(result == 1){
+            return;
+        }
+        if(result == -1){
+            closeOnInputEnd();
+        }
+        printf("That password is too long. Please use at most %zu characters.\n",
+               size - 1);
+    }
+}
+
+static bool isBlank(const char* text){
+    while(*text != '\0'){
+        if(*text != ' ' && *text != '\t'){
+            return false;
+        }
+        text++;
+    }
+    return true;
 }
 
 static int readInt(const char* prompt, int minimum, int maximum){
@@ -74,16 +154,34 @@ static double readMoney(const char* prompt){
     while(true){
         readText(prompt, input, sizeof(input));
         value = strtod(input, &end);
-        if(input[0] != '\0' && *end == '\0' && value >= 0.0){
+        if(input[0] != '\0' && *end == '\0' &&
+           value >= 0.0 && value <= 1000000.0){
             return value;
         }
-        printf("Please enter a price such as 12.50.\n");
+        printf("Please enter a price from 0.00 to 1000000.00.\n");
     }
 }
 
 static void waitForEnter(void){
     char input[INPUT_SIZE];
     readText("\nPress Enter to continue...", input, sizeof(input));
+}
+
+static bool readYesNo(const char* prompt){
+    char input[INPUT_SIZE];
+
+    while(true){
+        readText(prompt, input, sizeof(input));
+        if(strcmp(input, "y") == 0 || strcmp(input, "Y") == 0 ||
+           strcmp(input, "yes") == 0 || strcmp(input, "YES") == 0){
+            return true;
+        }
+        if(strcmp(input, "n") == 0 || strcmp(input, "N") == 0 ||
+           strcmp(input, "no") == 0 || strcmp(input, "NO") == 0){
+            return false;
+        }
+        printf("Please enter yes or no.\n");
+    }
 }
 
 static const char* safeRarity(int value){
@@ -115,15 +213,37 @@ static void printOwnedCardRow(size_t number, const OwnedCard* card){
            card->purchasePrice, card->value, change);
 }
 
-static bool createProfileScreen(char* loggedInUser){
+static bool createAccountScreen(char* loggedInUser){
     char username[USERNAME_SIZE];
     char password[PASSWORD_SIZE];
     char confirmPassword[PASSWORD_SIZE];
 
-    printHeader("CREATE PROFILE");
+    printHeader("CREATE ACCOUNT");
+    printf("Leave the username blank to return to the welcome menu.\n\n");
     readText("Choose a username: ", username, sizeof(username));
-    readText("Choose a password: ", password, sizeof(password));
-    readText("Enter the password again: ", confirmPassword, sizeof(confirmPassword));
+
+    if(username[0] == '\0'){
+        return false;
+    }
+    if(isBlank(username) || strchr(username, ',') != NULL){
+        printf("\nUse a visible username without commas.\n");
+        waitForEnter();
+        return false;
+    }
+    if(profileExists(username)){
+        printf("\nAn account with that username already exists. Please log in.\n");
+        waitForEnter();
+        return false;
+    }
+
+    readPassword("Choose a password: ", password, sizeof(password));
+    readPassword("Enter the password again: ", confirmPassword, sizeof(confirmPassword));
+
+    if(strlen(password) < 4){
+        printf("\nThe password must contain at least 4 characters.\n");
+        waitForEnter();
+        return false;
+    }
 
     if(strcmp(password, confirmPassword) != 0){
         printf("\nThe passwords did not match.\n");
@@ -133,12 +253,13 @@ static bool createProfileScreen(char* loggedInUser){
 
     if(createProfile(username, password)){
         copyString(loggedInUser, username, USERNAME_SIZE);
-        printf("\nProfile created. You are now logged in.\n");
+        printf("\nAccount created. You are now logged in.\n");
         waitForEnter();
         return true;
     }
 
-    printf("\nCould not create the profile. The username may already exist.\n");
+    printf("\nCould not create the account. Username and password are required,\n");
+    printf("and the username cannot contain a comma.\n");
     waitForEnter();
     return false;
 }
@@ -148,8 +269,13 @@ static bool loginScreen(char* loggedInUser){
     char password[PASSWORD_SIZE];
 
     printHeader("LOG IN");
+    printf("Leave the username blank to return to the welcome menu.\n\n");
     readText("Username: ", username, sizeof(username));
-    readText("Password: ", password, sizeof(password));
+
+    if(username[0] == '\0'){
+        return false;
+    }
+    readPassword("Password: ", password, sizeof(password));
 
     if(loginProfile(username, password)){
         copyString(loggedInUser, username, USERNAME_SIZE);
@@ -169,14 +295,14 @@ static bool accountScreen(char* loggedInUser){
     while(true){
         printHeader("WELCOME");
         printf("1. Log in\n");
-        printf("2. Create profile\n");
+        printf("2. Create account\n");
         printf("3. Exit\n\n");
         choice = readInt("Choose an option: ", 1, 3);
 
         if(choice == 1 && loginScreen(loggedInUser)){
             return true;
         }
-        if(choice == 2 && createProfileScreen(loggedInUser)){
+        if(choice == 2 && createAccountScreen(loggedInUser)){
             return true;
         }
         if(choice == 3){
@@ -186,16 +312,49 @@ static bool accountScreen(char* loggedInUser){
 }
 
 static void browseCatalogScreen(CardArrayList* catalog){
-    size_t index;
+    int matchCount = 0;
+    int* results;
+    int choice;
+    int index;
 
     printHeader("CARD CATALOG");
     if(catalog->size == 0){
         printf("No cards were loaded from data/cards.csv.\n");
+        waitForEnter();
+        return;
     }
-    for(index = 0; index < catalog->size; index++){
-        printCardRow(index + 1, &catalog->cards[index]);
+
+    printf("0. Return to home\n");
+    printf("1. Catalog order\n");
+    printf("2. Name (A-Z)\n");
+    printf("3. Name (Z-A)\n");
+    printf("4. Value (low-high)\n");
+    printf("5. Value (high-low)\n");
+    printf("6. Rarity (low-high)\n\n");
+    choice = readInt("Display order: ", 0, 6);
+    if(choice == 0){
+        return;
+    }
+
+    results = searchCards(catalog, "", &matchCount);
+    if(choice == 2){
+        sortAllCards(results, &matchCount, NAME, false);
+    } else if(choice == 3){
+        sortAllCards(results, &matchCount, NAME, true);
+    } else if(choice == 4){
+        sortAllCards(results, &matchCount, VALUE, false);
+    } else if(choice == 5){
+        sortAllCards(results, &matchCount, VALUE, true);
+    } else if(choice == 6){
+        sortAllCards(results, &matchCount, RARITY, false);
+    }
+
+    printf("\n");
+    for(index = 0; index < matchCount; index++){
+        printCardRow((size_t)results[index] + 1, &catalog->cards[results[index]]);
         printf("\n");
     }
+    free(results);
     waitForEnter();
 }
 
@@ -206,7 +365,11 @@ static void searchCatalogScreen(CardArrayList* catalog){
     int index;
 
     printHeader("SEARCH CATALOG");
+    printf("Leave the search blank to return to the home menu.\n\n");
     readText("Card name: ", searchText, sizeof(searchText));
+    if(searchText[0] == '\0'){
+        return;
+    }
     results = searchCards(catalog, searchText, &matchCount);
 
     printf("\n%d match%s found.\n\n", matchCount, matchCount == 1 ? "" : "es");
@@ -220,7 +383,10 @@ static void searchCatalogScreen(CardArrayList* catalog){
 
 static void vaultScreen(const char* username){
     OwnedCardArrayList list;
-    size_t index;
+    int matchCount = 0;
+    int* results;
+    int choice;
+    int index;
     double totalValue = 0.0;
     double totalPaid = 0.0;
 
@@ -231,21 +397,92 @@ static void vaultScreen(const char* username){
         return;
     }
 
-    for(index = 0; index < list.size; index++){
-        printOwnedCardRow(index + 1, &list.cards[index]);
-        printf("\n");
-        totalValue += list.cards[index].value;
-        totalPaid += list.cards[index].purchasePrice;
-    }
-
     if(list.size == 0){
         printf("Your vault is empty.\n");
-    } else {
-        printLine();
-        printf("Cards: %zu | Paid: $%.2f | Value: $%.2f | Change: %+.2f\n",
-               list.size, totalPaid, totalValue, totalValue - totalPaid);
+        freeOwnedCardList(&list);
+        waitForEnter();
+        return;
     }
 
+    printf("0. Return to home\n");
+    printf("1. Date added\n");
+    printf("2. Name (A-Z)\n");
+    printf("3. Value (high-low)\n");
+    printf("4. Purchase price (high-low)\n");
+    printf("5. Rarity (high-low)\n\n");
+    choice = readInt("Display order: ", 0, 5);
+    if(choice == 0){
+        freeOwnedCardList(&list);
+        return;
+    }
+
+    results = searchOwnedCards(&list, "", &matchCount);
+    if(choice == 2){
+        sortOwnedCards(results, &matchCount, NAME, false);
+    } else if(choice == 3){
+        sortOwnedCards(results, &matchCount, VALUE, true);
+    } else if(choice == 4){
+        sortOwnedCards(results, &matchCount, PRICE, true);
+    } else if(choice == 5){
+        sortOwnedCards(results, &matchCount, RARITY, true);
+    }
+
+    printf("\n");
+    for(index = 0; index < matchCount; index++){
+        printOwnedCardRow((size_t)results[index] + 1, &list.cards[results[index]]);
+        printf("\n");
+        totalValue += list.cards[results[index]].value;
+        totalPaid += list.cards[results[index]].purchasePrice;
+    }
+
+    if(matchCount > 0){
+        printLine();
+        printf("Cards: %d | Paid: $%.2f | Value: $%.2f | Change: %+.2f\n",
+               matchCount, totalPaid, totalValue, totalValue - totalPaid);
+    } else {
+        printf("Your vault is empty.\n");
+    }
+
+    free(results);
+    freeOwnedCardList(&list);
+    waitForEnter();
+}
+
+static void searchVaultScreen(const char* username){
+    OwnedCardArrayList list;
+    char searchText[INPUT_SIZE];
+    int matchCount = 0;
+    int* results;
+    int index;
+
+    printHeader("SEARCH MY VAULT");
+    if(!loadOwnedCards(username, &list)){
+        printf("Could not load your collection.\n");
+        waitForEnter();
+        return;
+    }
+    if(list.size == 0){
+        printf("Your vault is empty.\n");
+        freeOwnedCardList(&list);
+        waitForEnter();
+        return;
+    }
+
+    printf("Leave the search blank to return to the home menu.\n\n");
+    readText("Card name: ", searchText, sizeof(searchText));
+    if(searchText[0] == '\0'){
+        freeOwnedCardList(&list);
+        return;
+    }
+
+    results = searchOwnedCards(&list, searchText, &matchCount);
+    printf("\n%d match%s found.\n\n", matchCount, matchCount == 1 ? "" : "es");
+    for(index = 0; index < matchCount; index++){
+        printOwnedCardRow((size_t)results[index] + 1, &list.cards[results[index]]);
+        printf("\n");
+    }
+
+    free(results);
     freeOwnedCardList(&list);
     waitForEnter();
 }
@@ -257,13 +494,23 @@ static void addCardScreen(const char* username, CardArrayList* catalog){
     OwnedCard newCard;
 
     printHeader("ADD CARD TO VAULT");
+    if(catalog->size == 0){
+        printf("No cards are available to add. Check data/cards.csv.\n");
+        waitForEnter();
+        return;
+    }
+
+    printf(" 0. Return to home\n");
     for(size_t index = 0; index < catalog->size; index++){
         printf("%2zu. %-24s | %-20s | $%.2f\n",
                index + 1, catalog->cards[index].name,
                catalog->cards[index].set, catalog->cards[index].value);
     }
 
-    choice = readInt("\nChoose a card number: ", 1, (int)catalog->size);
+    choice = readInt("\nChoose a card number: ", 0, (int)catalog->size);
+    if(choice == 0){
+        return;
+    }
     purchasePrice = readMoney("Purchase price: $");
     grade = readInt("Grade (1-10): ", 1, 10);
 
@@ -302,7 +549,21 @@ static void removeCardScreen(const char* username){
         printf("\n");
     }
 
-    choice = readInt("Choose a card number to remove: ", 1, (int)list.size);
+    printf(" 0. Return to home\n");
+    choice = readInt("Choose a card number to remove: ", 0, (int)list.size);
+    if(choice == 0){
+        freeOwnedCardList(&list);
+        return;
+    }
+    printf("\nSelected: %s from %s\n",
+           list.cards[choice - 1].name, list.cards[choice - 1].set);
+    if(!readYesNo("Remove this card? (yes/no): ")){
+        printf("\nRemoval canceled.\n");
+        freeOwnedCardList(&list);
+        waitForEnter();
+        return;
+    }
+
     if(removeOwnedCardRecord(username, (size_t)(choice - 1))){
         printf("\nCard removed.\n");
     } else {
@@ -329,20 +590,22 @@ static bool mainMenu(const char* username, CardArrayList* catalog){
     printf("1. Browse card catalog\n");
     printf("2. Search cards\n");
     printf("3. View my vault\n");
-    printf("4. Add a card\n");
-    printf("5. Remove a card\n");
-    printf("6. View profile\n");
-    printf("7. Log out\n\n");
+    printf("4. Search my vault\n");
+    printf("5. Add a card\n");
+    printf("6. Remove a card\n");
+    printf("7. View profile\n");
+    printf("8. Log out\n\n");
 
-    choice = readInt("Choose an option: ", 1, 7);
+    choice = readInt("Choose an option: ", 1, 8);
     switch(choice){
         case 1: browseCatalogScreen(catalog); break;
         case 2: searchCatalogScreen(catalog); break;
         case 3: vaultScreen(username); break;
-        case 4: addCardScreen(username, catalog); break;
-        case 5: removeCardScreen(username); break;
-        case 6: profileScreen(username); break;
-        case 7: return false;
+        case 4: searchVaultScreen(username); break;
+        case 5: addCardScreen(username, catalog); break;
+        case 6: removeCardScreen(username); break;
+        case 7: profileScreen(username); break;
+        case 8: return false;
     }
     return true;
 }

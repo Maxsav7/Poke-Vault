@@ -10,7 +10,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -45,17 +44,6 @@ public class CatalogActivity extends Activity {
     }
 
     private void showCards(List<Card> cards) {
-        cardList.setAdapter(new CardAdapter(this, cards, data, "Add to Vault",
-            new CardAdapter.CardAction() {
-                @Override
-                public void run(Card card) {
-                    data.addCard(card);
-                    Toast.makeText(CatalogActivity.this,
-                        card.getName() + " added to your vault.", Toast.LENGTH_SHORT).show();
-                    showCards(data.searchCards(
-                        ((EditText) findViewById(R.id.searchInput)).getText().toString()
-                    ));
-                }
-            }));
+        cardList.setAdapter(new CardAdapter(this, cards, data, false, null));
     }
 }
