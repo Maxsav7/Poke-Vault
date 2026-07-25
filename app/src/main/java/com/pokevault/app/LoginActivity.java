@@ -9,13 +9,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class LoginActivity extends Activity {
+    public static final String PROFILE_CREATED_EXTRA = "profile_created";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        showProfileCreatedMessage();
 
         findViewById(R.id.loginButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -30,6 +34,23 @@ public class LoginActivity extends Activity {
                 startActivity(new Intent(LoginActivity.this, CreateProfileActivity.class));
             }
         });
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        showProfileCreatedMessage();
+    }
+
+    private void showProfileCreatedMessage() {
+        TextView message = findViewById(R.id.loginMessageText);
+        boolean profileCreated = getIntent().getBooleanExtra(PROFILE_CREATED_EXTRA, false);
+        message.setVisibility(profileCreated ? View.VISIBLE : View.GONE);
+        if (profileCreated) {
+            message.setText("Profile created successfully. Please log in.");
+            getIntent().removeExtra(PROFILE_CREATED_EXTRA);
+        }
     }
 
     private void logIn() {

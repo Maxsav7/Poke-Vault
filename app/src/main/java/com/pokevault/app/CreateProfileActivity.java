@@ -5,6 +5,7 @@
 package com.pokevault.app;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -51,7 +52,10 @@ public class CreateProfileActivity extends Activity {
             return;
         }
 
-        Toast.makeText(this, "Profile created. You can log in.", Toast.LENGTH_SHORT).show();
+        Intent login = new Intent(this, LoginActivity.class);
+        login.putExtra(LoginActivity.PROFILE_CREATED_EXTRA, true);
+        login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(login);
         finish();
     }
 }
