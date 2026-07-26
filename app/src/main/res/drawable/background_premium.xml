@@ -1,14 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Soft metallic champagne base -->
     <item>
         <shape android:shape="rectangle">
-            <gradient android:angle="270" android:startColor="#FFFFFBF2" android:endColor="#FFFFF3D8" />
+            <gradient
+                android:angle="315"
+                android:startColor="#FFF8E6"
+                android:centerColor="#FFFFFCF5"
+                android:endColor="#F4D98C"
+                android:type="linear" />
         </shape>
     </item>
-    <item android:width="190dp" android:height="430dp" android:gravity="top|right" android:right="-70dp" android:top="-35dp">
-        <shape android:shape="oval"><solid android:color="#18F9C74F" /></shape>
+
+    <!-- Very subtle reflected gold light -->
+    <item
+        android:width="210dp"
+        android:height="470dp"
+        android:gravity="top|right"
+        android:right="-88dp"
+        android:top="-54dp">
+        <shape android:shape="oval">
+            <gradient
+                android:angle="270"
+                android:startColor="#16FFFFFF"
+                android:centerColor="#12F9C74F"
+                android:endColor="#04D9A928" />
+        </shape>
     </item>
-    <item android:width="190dp" android:height="430dp" android:gravity="bottom|left" android:left="-70dp" android:bottom="-30dp">
-        <shape android:shape="oval"><solid android:color="#12F9C74F" /></shape>
+
+    <item
+        android:width="210dp"
+        android:height="470dp"
+        android:gravity="bottom|left"
+        android:left="-92dp"
+        android:bottom="-58dp">
+        <shape android:shape="oval">
+            <gradient
+                android:angle="90"
+                android:startColor="#03D9A928"
+                android:centerColor="#0EF9C74F"
+                android:endColor="#12FFFFFF" />
+        </shape>
     </item>
+
 </layer-list>
