@@ -1,34 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="vault_background">#FFF8E7</color>
+    <color name="vault_background_deep">#FFF1CC</color>
+    <color name="vault_surface">#FFFEFB</color>
+    <color name="vault_surface_pressed">#FFF9EC</color>
 
-    <!-- Main surfaces -->
-    <color name="vault_background">#FFF3D6</color>
-    <color name="vault_background_deep">#F7E3B2</color>
-    <color name="vault_surface">#FFFFFF</color>
-    <color name="vault_surface_pressed">#FFF9E8</color>
-
-    <!-- Brand colors -->
-    <color name="vault_dark">#15365F</color>
+    <color name="vault_dark">#1E3A5F</color>
+    <color name="vault_blue">#1979E0</color>
     <color name="vault_red">#E53935</color>
     <color name="vault_red_pressed">#C92F2C</color>
 
-    <!-- Metallic gold accents -->
-    <color name="vault_gold">#D6A820</color>
-    <color name="vault_gold_light">#F6DE83</color>
-    <color name="vault_gold_dark">#A97800</color>
+    <color name="vault_gold">#F9C74F</color>
+    <color name="vault_gold_light">#FFF0A6</color>
+    <color name="vault_gold_dark">#B88912</color>
 
-    <!-- Text -->
-    <color name="text_primary">#203A59</color>
-    <color name="text_secondary">#596574</color>
-    <color name="text_muted">#7E8792</color>
+    <color name="text_primary">#1E3A5F</color>
+    <color name="text_secondary">#6F7480</color>
+    <color name="text_muted">#959AA3</color>
+    <color name="divider">#E6D6A7</color>
 
-    <!-- Borders and neutral controls -->
-    <color name="divider">#D8C8A2</color>
-    <color name="neutral_button">#FFF9E9</color>
-    <color name="neutral_pressed">#F1E1B8</color>
-
-    <!-- Utility -->
     <color name="white">#FFFFFF</color>
-    <color name="black">#20242C</color>
-
+    <color name="transparent">#00000000</color>
 </resources>

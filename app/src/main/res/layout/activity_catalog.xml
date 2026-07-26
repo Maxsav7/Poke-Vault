@@ -1,161 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- CATALOG SCREEN: Existing IDs preserved for Java compatibility. -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/background_premium"
-    android:orientation="vertical"
-    android:paddingStart="22dp"
-    android:paddingTop="46dp"
-    android:paddingEnd="22dp"
-    android:paddingBottom="22dp">
-
-    <!-- Page header -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_semibold"
-            android:includeFontPadding="false"
-            android:text="Card Catalog"
-            android:textColor="@color/vault_dark"
-            android:textSize="30sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:fontFamily="@font/nunito_sans_regular"
-            android:text="Discover cards for your collection"
-            android:textColor="@color/text_secondary"
-            android:textSize="15sp" />
-
-        <View
-            android:layout_width="56dp"
-            android:layout_height="4dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/gold_accent" />
-
-    </LinearLayout>
-
-    <!-- Search section -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="26dp"
-        android:background="@drawable/panel"
-        android:elevation="4dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_semibold"
-            android:includeFontPadding="false"
-            android:text="Find a Card"
-            android:textColor="@color/vault_dark"
-            android:textSize="17sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:fontFamily="@font/nunito_sans_regular"
-            android:text="Search the catalog by card name"
-            android:textColor="@color/text_secondary"
-            android:textSize="13sp" />
-
-        <EditText
-            android:id="@+id/searchInput"
-            android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/search_field"
-            android:fontFamily="@font/nunito_sans_regular"
-            android:hint="Search cards..."
-            android:inputType="text"
-            android:paddingStart="18dp"
-            android:paddingEnd="18dp"
-            android:singleLine="true"
-            android:textColor="@color/text_primary"
-            android:textColorHint="@color/text_secondary"
-            android:textSize="16sp" />
-
-        <Button
-            android:id="@+id/catalogFilterButton"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/button_outline_navy"
-            android:backgroundTint="@null"
-            android:fontFamily="@font/poppins_semibold"
-            android:text="Filters"
-            android:textAllCaps="false"
-            android:textColor="@color/vault_dark" />
-
-    </LinearLayout>
-
-    <!-- Catalog heading -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:fontFamily="@font/poppins_semibold"
-            android:includeFontPadding="false"
-            android:text="Available Cards"
-            android:textColor="@color/vault_dark"
-            android:textSize="19sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/nunito_sans_regular"
-            android:text="CATALOG"
-            android:textColor="@color/vault_gold_dark"
-            android:textSize="11sp" />
-
-    </LinearLayout>
-
-    <!-- Card results -->
-    <ListView
-        android:id="@+id/cardList"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="12dp"
-        android:layout_weight="1"
-        android:clipToPadding="false"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="12dp"
-        android:listSelector="@android:color/transparent"
-        android:overScrollMode="never"
-        android:paddingTop="2dp"
-        android:paddingBottom="8dp"
-        android:scrollbars="none" />
-
-    <!-- Back action -->
-    <Button
-        android:id="@+id/catalogBackButton"
-        android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:layout_marginTop="14dp"
-        android:background="@drawable/button_outline_navy"
-        android:backgroundTint="@null"
-        android:elevation="1dp"
-        android:fontFamily="@font/poppins_semibold"
-        android:text="Back to Dashboard"
-        android:textAllCaps="false"
-        android:textColor="@color/vault_dark"
-        android:textSize="15sp" />
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/background_premium" android:orientation="vertical" android:paddingStart="22dp" android:paddingTop="96dp" android:paddingEnd="22dp" android:paddingBottom="16dp">
+ <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal">
+  <ImageButton android:id="@+id/catalogBackButton" android:layout_width="46dp" android:layout_height="46dp" android:background="@drawable/circle_gold" android:padding="11dp" android:src="@drawable/ic_back" android:contentDescription="Back"/>
+  <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="14dp" android:layout_weight="1" android:orientation="vertical">
+   <TextView style="@style/PokeVault.PageTitle" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Card Catalog"/>
+   <TextView style="@style/PokeVault.Body" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Discover cards for your collection."/>
+  </LinearLayout>
+  <ImageView android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/logo_pokevault" android:contentDescription="PokéVault"/>
+ </LinearLayout>
+ <View android:layout_width="64dp" android:layout_height="5dp" android:layout_marginStart="60dp" android:layout_marginTop="20dp" android:background="@drawable/divider_gold"/>
+ <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="30dp" android:background="@drawable/card_surface" android:elevation="4dp" android:orientation="vertical">
+  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal">
+   <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_search" android:contentDescription="Search"/>
+   <TextView style="@style/PokeVault.SectionTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="10dp" android:text="Find a Card"/>
+  </LinearLayout>
+  <TextView style="@style/PokeVault.Body" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:text="Search the catalog by card name"/>
+  <EditText android:id="@+id/searchInput" android:layout_width="match_parent" android:layout_height="58dp" android:layout_marginTop="16dp" android:background="@drawable/search_field" android:hint="Search cards..." android:imeOptions="actionSearch" android:inputType="text" android:singleLine="true" android:textColor="@color/text_primary" android:textColorHint="@color/text_muted"/>
+  <Button android:id="@+id/catalogFilterButton" style="@style/PokeVault.PrimaryButton" android:layout_width="match_parent" android:layout_height="46dp" android:layout_marginTop="12dp" android:text="Filters"/>
+ </LinearLayout>
+ <TextView style="@style/PokeVault.SectionTitle" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="24dp" android:text="Available Cards"/>
+ <ListView android:id="@+id/cardList" android:layout_width="match_parent" android:layout_height="0dp" android:layout_marginTop="12dp" android:layout_weight="1" android:clipToPadding="false" android:divider="@android:color/transparent" android:dividerHeight="12dp" android:paddingBottom="18dp"/>
 </LinearLayout>

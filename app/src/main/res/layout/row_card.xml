@@ -2,24 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/panel"
-    android:elevation="3dp"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:background="@drawable/card_surface"
+    android:elevation="4dp"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="top"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/cardImage"
-            android:layout_width="92dp"
-            android:layout_height="128dp"
-            android:adjustViewBounds="true"
-            android:background="@drawable/stat_tile"
-            android:contentDescription="Pokemon card image"
+            android:layout_width="78dp"
+            android:layout_height="110dp"
+            android:background="@drawable/input_field"
+            android:contentDescription="Card image"
+            android:padding="7dp"
             android:scaleType="fitCenter" />
 
         <LinearLayout
@@ -31,86 +30,88 @@
 
             <TextView
                 android:id="@+id/cardNameText"
+                style="@style/PokeVault.SectionTitle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_semibold"
-                android:maxLines="2"
-                android:text="Card Name"
-                android:textColor="@color/vault_dark"
-                android:textSize="18sp" />
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/cardInfoText"
+                style="@style/PokeVault.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:fontFamily="@font/nunito_sans_regular"
-                android:text="Base Set card details"
-                android:textColor="@color/text_secondary"
-                android:textSize="13sp" />
+                android:layout_marginTop="4dp"
+                android:lineSpacingExtra="2dp" />
 
             <Spinner
                 android:id="@+id/cardConditionSpinner"
                 android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/input_field"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp" />
-
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/condition_field"
+                android:paddingStart="12dp"
+                android:paddingEnd="8dp" />
         </LinearLayout>
-
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="12dp"
-        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/cardMinusButton"
-            android:layout_width="52dp"
-            android:layout_height="42dp"
-            android:background="@drawable/button_secondary"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:background="@drawable/circle_navy"
             android:backgroundTint="@null"
+            android:fontFamily="@font/poppins_semibold"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
             android:text="−"
+            android:textAllCaps="false"
             android:textColor="@color/vault_dark"
             android:textSize="22sp" />
 
         <TextView
             android:id="@+id/cardQuantityText"
-            android:layout_width="70dp"
+            android:layout_width="38dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_semibold"
             android:gravity="center"
             android:text="0"
             android:textColor="@color/vault_dark"
-            android:textSize="18sp" />
+            android:textSize="17sp" />
 
         <Button
             android:id="@+id/cardPlusButton"
-            android:layout_width="52dp"
-            android:layout_height="42dp"
-            android:background="@drawable/button_red"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:background="@drawable/circle_gold"
             android:backgroundTint="@null"
+            android:fontFamily="@font/poppins_semibold"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
             android:text="+"
-            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:textColor="@color/vault_dark"
             android:textSize="20sp" />
 
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/cardActionButton"
+            style="@style/PokeVault.PrimaryButton"
+            android:layout_width="112dp"
+            android:layout_height="46dp"
+            android:layout_marginStart="10dp"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="Remove Card"
+            android:textSize="11sp" />
     </LinearLayout>
-
-    <Button
-        android:id="@+id/cardActionButton"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/button_outline_navy"
-        android:backgroundTint="@null"
-        android:text="Remove Card"
-        android:textAllCaps="false"
-        android:textColor="@color/vault_dark"
-        android:visibility="gone" />
-
 </LinearLayout>
