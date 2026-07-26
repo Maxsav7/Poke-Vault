@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/nunito_sans_regular"
-                android:text="Choose a username and secure password."
+                android:text="A username and password are both required to save your profile."
                 android:textColor="@color/text_secondary"
                 android:textSize="15sp" />
 
